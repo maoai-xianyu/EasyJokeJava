@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.mao.baselibrary.ExceptionCrashHandler;
 import com.mao.baselibrary.baseUtils.LogU;
+import com.mao.baselibrary.fixBug.FixDexManager;
+import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
 import com.mao.framelibrary.BaseSkinActivity;
 
@@ -24,13 +26,61 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
 
-
         // 获取上次的崩溃信息上传到服务器
         //LogU.d("  res  " + crashMsg());
+        // crashMsg()
 
-        // 测试 阿里云 修复bug , 直接获取本地内存卡里面的 fix.path
+        // 阿里 有点问题
+        // andFix();
 
-        LogU.d("  res  "+Environment.getExternalStorageDirectory());
+        // 自己写
+        fixDexBug();
+    }
+
+    private void fixDexBug() {
+        File fixFile = new File(Environment.getExternalStorageDirectory(), "fix.dex");
+        LogU.d(" fixFile " + fixFile);
+        if (fixFile.exists()) {
+            LogU.d(" fixFile 存在");
+            FixDexManager fixDexManager = new FixDexManager(this);
+            try {
+                fixDexManager.fixDex(fixFile.getAbsolutePath());
+                Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+
+    @Override
+    protected void initView() {
+        mTv.setText("ICO");
+
+    }
+
+    @Override
+    protected void initTitle() {
+
+    }
+
+    @Override
+    protected void setContentView() {
+        setContentView(R.layout.activity_main);
+    }
+
+
+    @OnClick(R.id.tv)
+    private void onClick(View view) {
+        startActivity(TestActivity.class);
+    }
+
+
+    private void andFix() {
+        // 测试 阿里云 修复bug , 直接获取本地内存卡里面的 fix.apatch
+        LogU.d("  res  " + Environment.getExternalStorageDirectory());
 
         File fixFile = new File(Environment.getExternalStorageDirectory(), "fix.apatch");
         if (fixFile.exists()) {
@@ -45,7 +95,6 @@ public class MainActivity extends BaseSkinActivity {
                 Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     private String crashMsg() {
@@ -84,29 +133,6 @@ public class MainActivity extends BaseSkinActivity {
 
         }
         return res;
-    }
-
-    @Override
-    protected void initView() {
-        mTv.setText("ICO");
-
-        viewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, 2 / 1 + "测试", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    @Override
-    protected void initTitle() {
-
-    }
-
-    @Override
-    protected void setContentView() {
-        setContentView(R.layout.activity_main);
     }
 
 }
