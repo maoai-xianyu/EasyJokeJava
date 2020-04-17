@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 
 import com.alipay.euler.andfix.patch.PatchManager;
 import com.mao.baselibrary.ExceptionCrashHandler;
+import com.mao.baselibrary.fixBug.FixDexManager;
 
 
 /**
@@ -31,13 +32,13 @@ public class BaseApplication extends Application {
         // 加载之前的 apatch 包
         mPatchManager.loadPatch();*/
 
-        /*try {
+        try {
             FixDexManager fixDexManager = new FixDexManager(this);
             // 加载所有修复的Dex包
             fixDexManager.loadFixDex();
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
 

@@ -35,38 +35,33 @@ public class FixDexManager {
         this.mDexDir = context.getDir("odex", Context.MODE_PRIVATE);
     }
 
+
     /**
-     * 修复dex包
-     *
-     * @param fixDexPath
+     * 加载全部的修复包
      */
-    public void fixDex(String fixDexPath) throws Exception {
+    public void loadFixDex() throws Exception {
+        File[] dexFiles = mDexDir.listFiles();
+        List<File> fixDexFiles = new ArrayList<>();
+        for (File dexFile : dexFiles) {
+            if (dexFile.getName().endsWith(".dex")) {
+                fixDexFiles.add(dexFile);
+            }
+        }
+
+        fixDexFiles(fixDexFiles);
+    }
+
+    /**
+     * 修复dex
+     *
+     * @param fixDexFiles
+     */
+    private void fixDexFiles(List<File> fixDexFiles) throws Exception {
         // 1. 先获取已经运行的 dexElement
 
         ClassLoader mApplicationClassLoader = mContext.getClassLoader();
 
         Object applicationDexElements = getDexElementsByClassLoader(mApplicationClassLoader);
-
-        // 2. 获取下载好的补丁的 dexElement
-
-        // 2.1  移动到系统能够访问的 dex 目录下 ClassLoader
-        File srcFile = new File(fixDexPath);
-        if (!srcFile.exists()) {
-            throw new FileNotFoundException(fixDexPath);
-        }
-
-        File destFile = new File(mDexDir, srcFile.getName());
-        if (destFile.exists()) {
-            Log.d(TAG, "patch [" + fixDexPath + "] has be loaded.");
-            return;
-        }
-        copyFile(srcFile, destFile);
-
-        // 2.2 ClassLoader 读取 fixDexPath 路劲 为啥加入集合？因为一启动可能就要修复 BaseApplication
-
-        List<File> fixDexFiles = new ArrayList<>();
-        fixDexFiles.add(destFile);
-
 
         File optimizedDirectory = new File(mDexDir, "odex");
         if (!optimizedDirectory.exists()) {
@@ -95,7 +90,35 @@ public class FixDexManager {
 
         // 把合并的数组 注入到原来的类中 mApplicationClassLoader
         injectDexElements(mApplicationClassLoader, applicationDexElements);
+    }
 
+    /**
+     * 修复dex包
+     *
+     * @param fixDexPath
+     */
+    public void fixDex(String fixDexPath) throws Exception {
+
+        // 2. 获取下载好的补丁的 dexElement
+
+        // 2.1  移动到系统能够访问的 dex 目录下 ClassLoader
+        File srcFile = new File(fixDexPath);
+        if (!srcFile.exists()) {
+            throw new FileNotFoundException(fixDexPath);
+        }
+
+        File destFile = new File(mDexDir, srcFile.getName());
+        if (destFile.exists()) {
+            Log.d(TAG, "patch [" + fixDexPath + "] has be loaded.");
+            return;
+        }
+        copyFile(srcFile, destFile);
+
+        // 2.2 ClassLoader 读取 fixDexPath 路劲 为啥加入集合？因为一启动可能就要修复 BaseApplication
+
+        List<File> fixDexFiles = new ArrayList<>();
+        fixDexFiles.add(destFile);
+        fixDexFiles(fixDexFiles);
     }
 
     /**
