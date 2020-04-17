@@ -38,11 +38,14 @@ public class LoadingActivity extends BaseSkinActivity {
         setContentView(R.layout.activity_loading);
     }
 
-    @OnClick({R.id.tv, R.id.tvP})
+    @OnClick({R.id.tv, R.id.tvP, R.id.tvFix})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv:
-                startActivity(MainActivity.class,true);
+                startActivity(MainActivity.class, true);
+                break;
+            case R.id.tvFix:
+                startActivity(FixedActivity.class, true);
                 break;
             case R.id.tvP:
                 AndPermission.with(this)
@@ -53,7 +56,7 @@ public class LoadingActivity extends BaseSkinActivity {
                         .onGranted(permissions -> {
                             // Storage permission are allowed.
                             for (int i = 0; i < permissions.size(); i++) {
-                                LogU.d("权限 "+permissions.get(i));
+                                LogU.d("权限 " + permissions.get(i));
                             }
                         })
                         .onDenied(permissions -> {
