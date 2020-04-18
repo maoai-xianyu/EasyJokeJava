@@ -87,7 +87,7 @@ public class FixedActivity extends BaseSkinActivity {
             // 修复bug
 
             try {
-                BaseApplication.mPatchManager.addPatch(fixFile.getAbsolutePath());
+                BaseJokeApplication.mPatchManager.addPatch(fixFile.getAbsolutePath());
                 Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
