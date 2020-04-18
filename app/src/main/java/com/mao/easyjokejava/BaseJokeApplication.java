@@ -1,11 +1,11 @@
 package com.mao.easyjokejava;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import com.alipay.euler.andfix.patch.PatchManager;
+import com.mao.baselibrary.BaseApplication;
 import com.mao.baselibrary.ExceptionCrashHandler;
 import com.mao.baselibrary.fixBug.FixDexManager;
 
@@ -15,14 +15,26 @@ import com.mao.baselibrary.fixBug.FixDexManager;
  * @time 2020-04-16 22:18
  * @Description
  */
-public class BaseApplication extends Application {
+public class BaseJokeApplication extends BaseApplication {
 
     public static PatchManager mPatchManager;
 
 
     @Override
-    public void onCreate() {
-        super.onCreate();
+    protected void beforeCreate() {
+
+    }
+
+
+    @Override
+    protected void initApplication() {
+
+    }
+
+
+    @Override
+    protected void afterOnCreate() {
+
         // 设置全局异常捕捉类
         ExceptionCrashHandler.getInstance().init(this);
 
@@ -39,8 +51,8 @@ public class BaseApplication extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
+    }
 
     public static String packageName(Context context) {
         PackageManager manager = context.getPackageManager();
