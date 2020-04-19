@@ -4,8 +4,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.baselibrary.baseUtils.ToastUtils;
 import com.mao.baselibrary.dialog.AlertDialog;
+import com.mao.baselibrary.http.EngineCallBack;
+import com.mao.baselibrary.http.HttpUtils;
 import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
 import com.mao.framelibrary.BaseSkinActivity;
@@ -19,6 +22,26 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initData() {
+
+        HttpUtils.with(this).url("https://api.apiopen.top/videoHomeTab")
+                .get().execute(new EngineCallBack() {
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                LogU.d("result "+result);
+
+            }
+        });
+
+
+        // 问题：
+        // 1. 请求参数 很多但有些是公用的
+        // 2. 回调每次都用 Json转换  但是不能够直接用泛型
+        // 3. 数据库的问题，缓存 新闻类特有的效果，第三方的数据库都是缓存在 data/data/XXX/database  工厂设计模式和单例设计模式
 
     }
 
