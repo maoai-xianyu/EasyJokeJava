@@ -45,6 +45,7 @@ public class BaseJokeApplication extends BaseApplication {
         mPatchManager.loadPatch();*/
 
         try {
+            // 耗时，需要优化，一般是在 400ms
             FixDexManager fixDexManager = new FixDexManager(this);
             // 加载所有修复的Dex包
             fixDexManager.loadFixDex();

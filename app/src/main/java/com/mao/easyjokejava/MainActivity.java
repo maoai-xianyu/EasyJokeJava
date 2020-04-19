@@ -9,6 +9,7 @@ import com.mao.baselibrary.dialog.AlertDialog;
 import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
 import com.mao.framelibrary.BaseSkinActivity;
+import com.mao.framelibrary.DefaultNavigationBar;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -30,6 +31,18 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initTitle() {
+
+        DefaultNavigationBar defaultNavigationBar = new DefaultNavigationBar
+                .Builder(this)
+                .setTitle("投稿")
+                .setRightText("发布")
+                .setRightClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ToastUtils.show("右边发布");
+                    }
+                })
+                .builder();
 
     }
 
