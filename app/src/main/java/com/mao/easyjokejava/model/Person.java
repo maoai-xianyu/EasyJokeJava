@@ -1,11 +1,13 @@
 package com.mao.easyjokejava.model;
 
+import org.litepal.crud.LitePalSupport;
+
 /**
  * @author zhangkun
  * @time 2020-04-20 17:10
  * @Description
  */
-public class Person {
+public class Person extends LitePalSupport {
 
     private String name;
     private int age;

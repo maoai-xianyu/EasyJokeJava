@@ -9,6 +9,8 @@ import com.mao.baselibrary.BaseApplication;
 import com.mao.baselibrary.ExceptionCrashHandler;
 import com.mao.baselibrary.fixBug.FixDexManager;
 
+import org.litepal.LitePal;
+
 
 /**
  * @author zhangkun
@@ -28,6 +30,8 @@ public class BaseJokeApplication extends BaseApplication {
 
     @Override
     protected void initApplication() {
+
+        LitePal.initialize(this);
 
     }
 

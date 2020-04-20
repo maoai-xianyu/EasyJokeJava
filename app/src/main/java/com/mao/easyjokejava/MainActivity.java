@@ -20,6 +20,9 @@ import com.mao.framelibrary.HttpStringCallBack;
 import com.mao.framelibrary.db.DaoSupportFactory;
 import com.mao.framelibrary.db.IDaoSupport;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends BaseSkinActivity {
 
 
@@ -51,7 +54,6 @@ public class MainActivity extends BaseSkinActivity {
         // 问题：
         // 1. 请求参数 很多但有些是公用的
         // 2. 回调每次都用 Json转换  但是不能够直接用泛型
-        // 3. 数据库的问题，缓存 新闻类特有的效果，第三方的数据库都是缓存在 data/data/XXX/database  工厂设计模式和单例设计模式
 
 
         HttpUtils.with(this).url("https://api.apiopen.top/getWangYiNews") // 路劲 apk 参数都需要放到jni中，防止反编译
@@ -67,15 +69,33 @@ public class MainActivity extends BaseSkinActivity {
             @Override
             public void onSuccess(String result) {
                 NewsModel convert = GsonU.convert(result, NewsModel.class);
-               LogU.d("GsonU 转 convert " + convert);
+                LogU.d("GsonU 转 convert " + convert);
             }
         });
 
+        // 3. 数据库的问题，缓存 新闻类特有的效果，第三方的数据库都是缓存在 data/data/XXX/database  工厂设计模式和单例设计模式
 
+        // 3.1 为什么用Factory 目前的数据是在 内存卡中，有的时候我们需要放到  data/data/XXX/database
+        // 获取的Factory 不一样，那么写入的位置是可以不一样的
+
+        // 3.2 面向接口编程 获取 IDaoSupport 那么不需要关系实现，目前的实现是我们自己写的，可以切换第三方
+
+        // 3.3 为了高扩展
         IDaoSupport<Person> daoSupport = DaoSupportFactory.getInstance().getIDaoSupport(Person.class);
         // 最少知识原则
-        daoSupport.insert(new Person("mao",30));
+//        daoSupport.insert(new Person("mao",30));
 
+        List<Person> persons = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            persons.add(new Person("mao" + i, 30 + i));
+        }
+        long startTime = System.currentTimeMillis();
+        LogU.d("startTime  " + startTime);
+        daoSupport.insert(persons);  // 没有用事务 2359ms  用事务 76
+      //  LitePal.saveAll(persons); // 308
+
+        long endTime = System.currentTimeMillis();
+        LogU.d("time   2359ms " + (endTime - startTime));
 
     }
 
