@@ -12,10 +12,13 @@ import com.mao.baselibrary.http.HttpUtils;
 import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
 import com.mao.easyjokejava.model.NewsModel;
+import com.mao.easyjokejava.model.Person;
 import com.mao.framelibrary.BaseSkinActivity;
 import com.mao.framelibrary.DefaultNavigationBar;
 import com.mao.framelibrary.HttpCallBack;
 import com.mao.framelibrary.HttpStringCallBack;
+import com.mao.framelibrary.db.DaoSupportFactory;
+import com.mao.framelibrary.db.IDaoSupport;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -67,6 +70,11 @@ public class MainActivity extends BaseSkinActivity {
                LogU.d("GsonU 转 convert " + convert);
             }
         });
+
+
+        IDaoSupport<Person> daoSupport = DaoSupportFactory.getInstance().getIDaoSupport(Person.class);
+        // 最少知识原则
+        daoSupport.insert(new Person("mao",30));
 
 
     }
