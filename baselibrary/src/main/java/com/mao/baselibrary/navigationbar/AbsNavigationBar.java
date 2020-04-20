@@ -41,8 +41,15 @@ public abstract class AbsNavigationBar<P extends AbsNavigationBar.Builder.AbsNav
         if (mParams.mParent == null) {
             // 获取 Activity的根布局
             // 获取 activity的根布局
-            ViewGroup activityRoot = ((Activity) (mParams.mContext)).findViewById(android.R.id.content);
-            mParams.mParent = (ViewGroup) activityRoot.getChildAt(0);
+           /* ViewGroup activityRoot = ((Activity) (mParams.mContext)).findViewById(android.R.id.content);
+            mParams.mParent = (ViewGroup) activityRoot.getChildAt(0);*/
+
+            //如果布局文件是RelativeLayout 会有重叠效果
+            // 获取 DecorView 继承与 FrameLayout 里面初始化一个 LinearLayout 的 布局文件，LinearLayout 布局文件中
+            // 有一个 android.R.id.content 的 FrameLayout，我们一般的初始化布局是加载到了这个FrameLayout
+            ViewGroup decorView = (ViewGroup) ((Activity) (mParams.mContext)).getWindow().getDecorView();
+            mParams.mParent = (ViewGroup) decorView.getChildAt(0);
+
         }
         if (mParams.mParent == null) {
             return;
