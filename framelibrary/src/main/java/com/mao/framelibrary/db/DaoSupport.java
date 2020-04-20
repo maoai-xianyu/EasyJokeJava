@@ -3,11 +3,14 @@ package com.mao.framelibrary.db;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.collection.ArrayMap;
+
 import com.mao.baselibrary.baseUtils.LogU;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangkun
@@ -20,6 +23,9 @@ public class DaoSupport<T> implements IDaoSupport<T> {
     private SQLiteDatabase mSQLiteDatabase;
 
     private Class<T> mClazz;
+
+    private static final Object[] mPutMethodArgs = new Object[2];
+    private static final Map<String, Method> mPutMethods = new ArrayMap<>();
 
 
     @Override
@@ -94,12 +100,29 @@ public class DaoSupport<T> implements IDaoSupport<T> {
                 Object value = field.get(obj);
                 // put 第二个参数是类型 把它转化
 
+                // 方法使用反射，反射在一定程度上会影响性能
+                // 源码里面  activity的创建用到了反射   View创建用到了反射
+                // 第三方以及源码给我们提供的最好的学习  AppCompatViewInflater
+                mPutMethodArgs[0] = key;
+                mPutMethodArgs[1] = value;
+
                 // 还是使用反射 获取方法 put   public void put(String key, Boolean value)
-                Method putMethod = ContentValues.class.getDeclaredMethod("put", String.class, value.getClass());
+
+                String fieldTypeName = field.getType().getName();
+                Method putMethod = mPutMethods.get(fieldTypeName);
+                if (putMethod == null) {
+                    putMethod = ContentValues.class.getDeclaredMethod("put", String.class, value.getClass());
+                    mPutMethods.put(fieldTypeName, putMethod);
+                }
+                // Method putMethod = ContentValues.class.getDeclaredMethod("put", String.class, value.getClass());
                 // 通过反射执行
-                putMethod.invoke(values, key, value);
+                // putMethod.invoke(values, key, value);
+                putMethod.invoke(values, mPutMethodArgs);
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                mPutMethodArgs[0] = null;
+                mPutMethodArgs[1] = null;
             }
 
         }
@@ -116,7 +139,6 @@ public class DaoSupport<T> implements IDaoSupport<T> {
         }
         mSQLiteDatabase.setTransactionSuccessful();
         mSQLiteDatabase.endTransaction();
-
 
 
     }
