@@ -1,7 +1,6 @@
 package com.mao.baselibrary.http;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.mao.baselibrary.baseUtils.LogU;
 
@@ -34,7 +33,7 @@ public class OkHttpEngine implements IHttpEngine {
     @Override
     public void post(Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
         final String jointUrl = HttpUtils.jointParams(url, params);  //打印
-        LogU.e("Post请求路径：" + jointUrl);
+        LogU.d("Post请求路径：" + jointUrl);
 
         // 了解 Okhhtp
         RequestBody requestBody = appendBody(params);
@@ -54,7 +53,7 @@ public class OkHttpEngine implements IHttpEngine {
             public void onResponse(Call call, Response response) throws IOException {
                 // 这个 两个回掉方法都不是在主线程中
                 String result = response.body().string();
-                Log.e("Post返回结果：", jointUrl);
+                LogU.e("Post返回结果：" + result);
                 callBack.onSuccess(result);
             }
         });
@@ -123,7 +122,7 @@ public class OkHttpEngine implements IHttpEngine {
     public void get(Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
         url = HttpUtils.jointParams(url, params);
 
-        LogU.e("Get请求路径：" +url);
+        LogU.d("Get请求路径：" + url);
 
         Request.Builder requestBuilder = new Request.Builder().url(url).tag(context);
         //可以省略，默认是GET请求
@@ -139,7 +138,7 @@ public class OkHttpEngine implements IHttpEngine {
             public void onResponse(Call call, Response response) throws IOException {
                 String resultJson = response.body().string();
                 callBack.onSuccess(resultJson);
-                Log.e("Get返回结果：", resultJson);
+                LogU.d("Get返回结果：" + resultJson);
             }
         });
     }

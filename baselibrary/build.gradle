@@ -33,4 +33,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     api 'com.alipay.euler:andfix:0.5.0@aar'
     api "com.squareup.okhttp3:okhttp:3.12.8"
+    api 'com.google.code.gson:gson:2.8.6'
 }

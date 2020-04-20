@@ -11,12 +11,10 @@ import java.util.Map;
  * @author zhangkun
  * @time 2020-04-19 19:55
  * @Description 自己的
- *
+ * <p>
  * https://api.apiopen.top/getWangYiNews?page=1&count=20&version=2.0  // 获取新闻
- *
+ * <p>
  * https://api.apiopen.top/videoHomeTab // 获取分类
- *
- *
  */
 public class HttpUtils {
 
@@ -78,9 +76,13 @@ public class HttpUtils {
 
     // 添加回调 执行
     public void execute(EngineCallBack callBack) {
+
         if (callBack == null) {
             callBack = EngineCallBack.DEFAULT_CALL_BACK;
         }
+
+        callBack.onPerExecute(mContext, mParams);
+
         // 判断执行方法
         if (mType == POST_TYPE) {
             post(mUrl, mParams, callBack);
@@ -151,7 +153,10 @@ public class HttpUtils {
      */
     public static Class<?> analysisClazzInfo(Object object) {
         Type genType = object.getClass().getGenericSuperclass();
-        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+        Type[] params = new Type[0];
+        if (genType != null) {
+            params = ((ParameterizedType) genType).getActualTypeArguments();
+        }
         return (Class<?>) params[0];
     }
 }
