@@ -2,6 +2,8 @@ package com.mao.framelibrary.db;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.mao.framelibrary.db.curd.QuerySupport;
+
 import java.util.List;
 
 /**
@@ -18,4 +20,13 @@ public interface IDaoSupport<T> {
 
     // 批量插入 检测性能
     public void insert(List<T> datas);
+
+
+    // 获取专门查询的支持类
+    QuerySupport<T> querySupport();
+
+    // 按照语句查询
+    int delete(String whereClause, String... whereArgs);
+
+    int update(T obj, String whereClause, String... whereArgs);
 }

@@ -13,6 +13,10 @@ public class Person extends LitePalSupport {
     private int age;
     private boolean flag;
 
+    // 默认构造
+    public Person() {
+    }
+
     public Person(String name, int age) {
         this.name = name;
         this.age = age;

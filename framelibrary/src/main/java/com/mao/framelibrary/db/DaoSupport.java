@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.collection.ArrayMap;
 
 import com.mao.baselibrary.baseUtils.LogU;
+import com.mao.framelibrary.db.curd.QuerySupport;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,6 +27,8 @@ public class DaoSupport<T> implements IDaoSupport<T> {
 
     private static final Object[] mPutMethodArgs = new Object[2];
     private static final Map<String, Method> mPutMethods = new ArrayMap<>();
+
+    private QuerySupport<T> mQuerySupport;
 
 
     @Override
@@ -139,7 +142,35 @@ public class DaoSupport<T> implements IDaoSupport<T> {
         }
         mSQLiteDatabase.setTransactionSuccessful();
         mSQLiteDatabase.endTransaction();
-
-
     }
+
+    @Override
+    public QuerySupport<T> querySupport() {
+        if (mQuerySupport == null) {
+            mQuerySupport = new QuerySupport<>(mSQLiteDatabase, mClazz);
+        }
+        return mQuerySupport;
+    }
+
+    /**
+     * 删除
+     */
+    @Override
+    public int delete(String whereClause, String[] whereArgs) {
+        return mSQLiteDatabase.delete(DaoUtil.getTableName(mClazz), whereClause, whereArgs);
+    }
+
+    /**
+     * 更新  这些你需要对  最原始的写法比较明了 extends
+     */
+    @Override
+    public int update(T obj, String whereClause, String... whereArgs) {
+        ContentValues values = contentValuesByObj(obj);
+        return mSQLiteDatabase.update(DaoUtil.getTableName(mClazz),
+                values, whereClause, whereArgs);
+    }
+
+    // 结合到
+    // 1. 网络引擎的缓存
+    // 2. 资源加载的源码NDK
 }
