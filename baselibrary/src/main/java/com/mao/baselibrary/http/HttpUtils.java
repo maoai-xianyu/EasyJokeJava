@@ -20,7 +20,7 @@ public class HttpUtils {
 
 
     // 默认的引擎
-    private static IHttpEngine mIHttpEngine = new OkHttpEngine();
+    private static IHttpEngine mIHttpEngine = null;
 
     // 直接带参数，链式调用
     private String mUrl;
@@ -32,8 +32,10 @@ public class HttpUtils {
     // 上下文
     private Context mContext;
 
-
     private Map<String, Object> mParams;
+
+    // 是否读取缓存
+    private boolean mCache = false;
 
     private HttpUtils(Context context) {
         mContext = context;
@@ -59,6 +61,18 @@ public class HttpUtils {
 
     public HttpUtils url(String url) {
         mUrl = url;
+        return this;
+    }
+
+
+    /**
+     * 缓存
+     *
+     * @param isCache
+     * @return
+     */
+    public HttpUtils cache(boolean isCache) {
+        mCache = isCache;
         return this;
     }
 
@@ -114,11 +128,11 @@ public class HttpUtils {
 
 
     private void get(String url, Map<String, Object> params, EngineCallBack callBack) {
-        mIHttpEngine.get(mContext, url, params, callBack);
+        mIHttpEngine.get(mCache, mContext, url, params, callBack);
     }
 
     private void post(String url, Map<String, Object> params, EngineCallBack callBack) {
-        mIHttpEngine.post(mContext, url, params, callBack);
+        mIHttpEngine.post(mCache, mContext, url, params, callBack);
 
     }
 

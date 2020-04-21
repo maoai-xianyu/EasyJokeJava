@@ -1,7 +1,6 @@
 package com.mao.framelibrary.db;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.collection.ArrayMap;
@@ -11,8 +10,6 @@ import com.mao.framelibrary.db.curd.QuerySupport;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -176,102 +173,4 @@ public class DaoSupport<T> implements IDaoSupport<T> {
     // 结合到
     // 1. 网络引擎的缓存
     // 2. 资源加载的源码NDK
-
-    @Override
-    public List<T> queryAll() {
-        Cursor cursor = mSQLiteDatabase.query(DaoUtil.getTableName(mClazz), null, null, null, null, null, null);
-        return cursorToList(cursor);
-    }
-
-    /**
-     * 通过Cursor封装成查找对象
-     *
-     * @return 对象集合列表
-     */
-    private List<T> cursorToList(Cursor cursor) {
-        List<T> list = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                try {
-                    T instance = mClazz.newInstance();
-                    Field[] fields = mClazz.getDeclaredFields();
-                    for (Field field : fields) {
-                        // 遍历属性
-                        field.setAccessible(true);
-                        String name = field.getName();
-                        // 获取角标
-                        int index = cursor.getColumnIndex(name);
-                        if (index == -1) {
-                            continue;
-                        }
-                        // 通过反射获取 游标的方法 field.getType() 获取类型
-                        Method cursorMethod = cursorMethod(field.getType());
-                        if (cursorMethod != null) {
-                            Object value = cursorMethod.invoke(cursor, index);
-                            if (value == null) {
-                                continue;
-                            }
-
-                            // 处理一些特殊的部分
-                            if (field.getType() == boolean.class || field.getType() == Boolean.class) {
-                                if ("0".equals(String.valueOf(value))) {
-                                    value = false;
-                                } else if ("1".equals(String.valueOf(value))) {
-                                    value = true;
-                                }
-                            } else if (field.getType() == char.class || field.getType() == Character.class) {
-                                value = ((String) value).charAt(0);
-                            } else if (field.getType() == Date.class) {
-                                long date = (Long) value;
-                                if (date <= 0) {
-                                    value = null;
-                                } else {
-                                    value = new Date(date);
-                                }
-                            }
-                            field.set(instance, value);
-                        }
-                    }
-                    // 加入集合
-                    list.add(instance);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
-    }
-
-    /**
-     * 获取游标
-     * @param type
-     * @return
-     * @throws Exception
-     */
-    private Method cursorMethod(Class<?> type) throws Exception {
-        String methodName = getColumnMethodName(type);
-        Method method = Cursor.class.getMethod(methodName, int.class);
-        return method;
-    }
-
-    private String getColumnMethodName(Class<?> fieldType) {
-        String typeName;
-        if (fieldType.isPrimitive()) {
-            typeName = DaoUtil.capitalize(fieldType.getName());
-        } else {
-            typeName = fieldType.getSimpleName();
-        }
-        String methodName = "get" + typeName;
-        if ("getBoolean".equals(methodName)) {
-            methodName = "getInt";
-        } else if ("getChar".equals(methodName) || "getCharacter".equals(methodName)) {
-            methodName = "getString";
-        } else if ("getDate".equals(methodName)) {
-            methodName = "getLong";
-        } else if ("getInteger".equals(methodName)) {
-            methodName = "getInt";
-        }
-        return methodName;
-    }
 }

@@ -4,7 +4,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.mao.baselibrary.baseUtils.GsonU;
 import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.baselibrary.baseUtils.ToastUtils;
 import com.mao.baselibrary.dialog.AlertDialog;
@@ -16,7 +15,6 @@ import com.mao.easyjokejava.model.Person;
 import com.mao.framelibrary.BaseSkinActivity;
 import com.mao.framelibrary.DefaultNavigationBar;
 import com.mao.framelibrary.HttpCallBack;
-import com.mao.framelibrary.HttpStringCallBack;
 import com.mao.framelibrary.db.DaoSupportFactory;
 import com.mao.framelibrary.db.IDaoSupport;
 
@@ -31,8 +29,9 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initData() {
-
-        HttpUtils.with(this).url("https://api.apiopen.top/getWangYiNews") // 路劲 apk 参数都需要放到jni中，防止反编译
+        // 路劲 apk 参数都需要放到jni中，防止反编译  Ndk.  so 库
+        HttpUtils.with(this).url("https://api.apiopen.top/getWangYiNews")
+                .cache(true)
                 .addParam("page", 1)
                 .addParam("count", 20)
                 .get().execute(new HttpCallBack<NewsModel>() {
@@ -56,7 +55,7 @@ public class MainActivity extends BaseSkinActivity {
         // 2. 回调每次都用 Json转换  但是不能够直接用泛型
 
 
-        HttpUtils.with(this).url("https://api.apiopen.top/getWangYiNews") // 路劲 apk 参数都需要放到jni中，防止反编译
+        /*HttpUtils.with(this).url("https://api.apiopen.top/getWangYiNews")
                 .addParam("page", 1)
                 .addParam("count", 20)
                 .get().execute(new HttpStringCallBack() {
@@ -71,7 +70,7 @@ public class MainActivity extends BaseSkinActivity {
                 NewsModel convert = GsonU.convert(result, NewsModel.class);
                 LogU.d("GsonU 转 convert " + convert);
             }
-        });
+        });*/
 
         // 3. 数据库的问题，缓存 新闻类特有的效果，第三方的数据库都是缓存在 data/data/XXX/database  工厂设计模式和单例设计模式
 
@@ -91,14 +90,20 @@ public class MainActivity extends BaseSkinActivity {
         }
         long startTime = System.currentTimeMillis();
         LogU.d("startTime  " + startTime);
-       // daoSupport.insert(persons);  // 没有用事务 2359ms  用事务 76  再优化 31
-      //  LitePal.saveAll(persons); // 308
+        // daoSupport.insert(persons);  // 没有用事务 2359ms  用事务 76  再优化 31
+        //  LitePal.saveAll(persons); // 308
 
         long endTime = System.currentTimeMillis();
         LogU.d("time   2359ms " + (endTime - startTime));
 
-        List<Person> queryAll = daoSupport.queryAll();
-        LogU.d("queryAll "+queryAll);
+        List<Person> queryAll = daoSupport.querySupport().queryAll();
+
+        //List<Person> queryAll = daoSupport.queryAll();
+        //LogU.d("queryAll " + queryAll);
+
+        List<Person> query = daoSupport.querySupport().selection("age = ? ").selectionArgs("33").query();
+
+        //LogU.d("query age = 23 " + query);
 
     }
 

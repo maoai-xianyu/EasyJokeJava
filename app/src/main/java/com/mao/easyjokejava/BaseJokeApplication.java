@@ -8,6 +8,8 @@ import com.alipay.euler.andfix.patch.PatchManager;
 import com.mao.baselibrary.BaseApplication;
 import com.mao.baselibrary.ExceptionCrashHandler;
 import com.mao.baselibrary.fixBug.FixDexManager;
+import com.mao.baselibrary.http.HttpUtils;
+import com.mao.framelibrary.http.OkHttpEngine;
 
 import org.litepal.LitePal;
 
@@ -32,6 +34,8 @@ public class BaseJokeApplication extends BaseApplication {
     protected void initApplication() {
 
         LitePal.initialize(this);
+
+        HttpUtils.init(new OkHttpEngine());
 
     }
 

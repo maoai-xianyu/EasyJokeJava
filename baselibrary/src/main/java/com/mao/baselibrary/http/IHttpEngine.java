@@ -12,11 +12,11 @@ import java.util.Map;
 public interface IHttpEngine {
     // get
 
-    void get(Context context, String url, Map<String, Object> params, EngineCallBack callBack);
+    void get(boolean cache,Context context, String url, Map<String, Object> params, EngineCallBack callBack);
 
 
     // post
-    void post(Context context, String url, Map<String, Object> params, EngineCallBack callBack);
+    void post(boolean cache,Context context, String url, Map<String, Object> params, EngineCallBack callBack);
 
 
     // 下载文件

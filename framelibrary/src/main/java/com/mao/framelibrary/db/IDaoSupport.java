@@ -21,9 +21,6 @@ public interface IDaoSupport<T> {
     // 批量插入 检测性能
     public void insert(List<T> datas);
 
-
-    public List<T> queryAll();
-
     // 获取专门查询的支持类
     QuerySupport<T> querySupport();
 
