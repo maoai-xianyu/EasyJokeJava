@@ -91,11 +91,14 @@ public class MainActivity extends BaseSkinActivity {
         }
         long startTime = System.currentTimeMillis();
         LogU.d("startTime  " + startTime);
-        daoSupport.insert(persons);  // 没有用事务 2359ms  用事务 76  再优化 31
+       // daoSupport.insert(persons);  // 没有用事务 2359ms  用事务 76  再优化 31
       //  LitePal.saveAll(persons); // 308
 
         long endTime = System.currentTimeMillis();
         LogU.d("time   2359ms " + (endTime - startTime));
+
+        List<Person> queryAll = daoSupport.queryAll();
+        LogU.d("queryAll "+queryAll);
 
     }
 

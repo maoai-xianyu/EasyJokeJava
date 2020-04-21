@@ -22,6 +22,8 @@ public interface IDaoSupport<T> {
     public void insert(List<T> datas);
 
 
+    public List<T> queryAll();
+
     // 获取专门查询的支持类
     QuerySupport<T> querySupport();
 
