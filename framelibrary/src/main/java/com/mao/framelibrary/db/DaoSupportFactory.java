@@ -3,6 +3,8 @@ package com.mao.framelibrary.db;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
+import com.mao.baselibrary.baseUtils.LogU;
+
 import java.io.File;
 
 /**
@@ -22,6 +24,8 @@ public class DaoSupportFactory {
         // 把数据库放到内存卡里  判断是否有存储卡， 6.0 要动态申请权限
         File dbRoot = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator + "easyJoke" + File.separator + "database");
+
+        LogU.d(" dbRoot 目录 " + dbRoot.getAbsolutePath());
         if (!dbRoot.exists()) {
             dbRoot.mkdirs();
         }

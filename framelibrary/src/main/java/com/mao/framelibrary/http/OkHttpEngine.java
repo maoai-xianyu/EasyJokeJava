@@ -1,8 +1,13 @@
-package com.mao.baselibrary.http;
+package com.mao.framelibrary.http;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.mao.baselibrary.baseUtils.LogU;
+import com.mao.baselibrary.baseUtils.MD5Util;
+import com.mao.baselibrary.http.EngineCallBack;
+import com.mao.baselibrary.http.HttpUtils;
+import com.mao.baselibrary.http.IHttpEngine;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +36,7 @@ public class OkHttpEngine implements IHttpEngine {
 
 
     @Override
-    public void post(Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
+    public void post(boolean cache, Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
         final String jointUrl = HttpUtils.jointParams(url, params);  //打印
         LogU.d("Post请求路径：" + jointUrl);
 
@@ -119,10 +124,26 @@ public class OkHttpEngine implements IHttpEngine {
 
 
     @Override
-    public void get(Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
+    public void get(final boolean cache, Context context, String url, Map<String, Object> params, final EngineCallBack callBack) {
+        // 唯一标识
         url = HttpUtils.jointParams(url, params);
 
         LogU.d("Get请求路径：" + url);
+
+        final String finalUrl = MD5Util.string2MD5(url);
+
+
+        // 判断需不要需要缓存，然后判断有木有
+        if (cache) {
+
+            String cacheHttpRequestResultJson = CacheDataUtils.getCacheHttpRequestResultJson(finalUrl);
+            if (!TextUtils.isEmpty(cacheHttpRequestResultJson)) {
+                LogU.d("数据库有缓存 " + cacheHttpRequestResultJson);
+                // 需要缓存，而且数据库有缓存,直接执行
+                callBack.onSuccess(cacheHttpRequestResultJson);
+            }
+
+        }
 
         Request.Builder requestBuilder = new Request.Builder().url(url).tag(context);
         //可以省略，默认是GET请求
@@ -137,8 +158,27 @@ public class OkHttpEngine implements IHttpEngine {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String resultJson = response.body().string();
+                // 获取数据之后会执行成功的方法
+                // 2. 每次获取到的数据线，先比对
+
+                if (cache) {
+                    String cacheHttpRequestResultJson = CacheDataUtils.getCacheHttpRequestResultJson(finalUrl);
+                    if (!TextUtils.isEmpty(resultJson)) {
+                        if (resultJson.equals(cacheHttpRequestResultJson)) {
+                            // 内容一样，说明数据一样，不需要刷新界面
+                            LogU.d("新数据和缓存数据一样 不用刷新");
+                            return;
+                        }
+                    }
+                }
+
                 callBack.onSuccess(resultJson);
                 LogU.d("Get返回结果：" + resultJson);
+                // 缓存数据
+                if (cache) {
+                    CacheDataUtils.cacheData(finalUrl, resultJson);
+                }
+
             }
         });
     }
