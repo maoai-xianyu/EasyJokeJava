@@ -6,6 +6,8 @@ import android.widget.TextView;
 import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
+import com.mao.easyjokejava.test.DataBaseActivity;
+import com.mao.easyjokejava.test.FixedActivity;
 import com.mao.framelibrary.BaseSkinActivity;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -16,6 +18,8 @@ public class LoadingActivity extends BaseSkinActivity {
     private TextView mTv;
     @ViewById(R.id.tvP)
     private TextView tvP;
+    @ViewById(R.id.tvData)
+    private TextView tvData;
 
     @Override
     protected void initData() {
@@ -46,6 +50,9 @@ public class LoadingActivity extends BaseSkinActivity {
                 break;
             case R.id.tvFix:
                 startActivity(FixedActivity.class, true);
+                break;
+            case R.id.tvData:
+                startActivity(DataBaseActivity.class, true);
                 break;
             case R.id.tvP:
                 AndPermission.with(this)

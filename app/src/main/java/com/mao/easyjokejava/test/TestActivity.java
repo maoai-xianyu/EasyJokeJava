@@ -1,10 +1,11 @@
-package com.mao.easyjokejava;
+package com.mao.easyjokejava.test;
 
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mao.baselibrary.ioc.ViewById;
+import com.mao.easyjokejava.R;
 import com.mao.framelibrary.BaseSkinActivity;
 
 public class TestActivity extends BaseSkinActivity {

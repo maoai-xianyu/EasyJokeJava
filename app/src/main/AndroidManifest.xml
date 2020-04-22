@@ -29,8 +29,9 @@
             android:name=".MainActivity"
             android:launchMode="singleTask" />
 
-        <activity android:name=".FixedActivity" />
-        <activity android:name=".TestActivity" />
+        <activity android:name=".test.FixedActivity" />
+        <activity android:name=".test.TestActivity" />
+        <activity android:name=".test.DataBaseActivity" />
     </application>
 
 </manifest>

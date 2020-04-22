@@ -1,4 +1,4 @@
-package com.mao.easyjokejava;
+package com.mao.easyjokejava.test;
 
 import android.os.Environment;
 import android.view.View;
@@ -10,6 +10,8 @@ import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.baselibrary.fixBug.FixDexManager;
 import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
+import com.mao.easyjokejava.BaseJokeApplication;
+import com.mao.easyjokejava.R;
 import com.mao.framelibrary.BaseSkinActivity;
 
 import java.io.File;

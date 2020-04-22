@@ -13,14 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:text="获取皮肤的图片" />
-
-
-    <ImageView
-        android:id="@+id/iv"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/lichun" />
+        android:text="测试弹框" />
 
 </LinearLayout>
