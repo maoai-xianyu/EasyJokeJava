@@ -33,6 +33,8 @@ public class MainActivity extends BaseSkinActivity {
     protected void initView() {
         mTv.setText("ICO");
 
+        LogU.d("mIv " + mIv);
+
     }
 
     @Override
@@ -66,7 +68,7 @@ public class MainActivity extends BaseSkinActivity {
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                     + File.separator + "easyJoke.skin");
 
-            if (file.exists()){
+            if (file.exists()) {
                 LogU.d("文件存在");
             }
 
