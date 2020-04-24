@@ -25,13 +25,22 @@
             </intent-filter>
         </activity>
 
+        <!-- <activity
+             android:name=".MainActivity"
+             android:launchMode="singleTask" />-->
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask" />
+            android:theme="@style/AppTheme" />
 
-        <activity android:name=".test.FixedActivity" />
-        <activity android:name=".test.TestActivity" />
-        <activity android:name=".test.DataBaseActivity" />
+        <activity
+            android:name=".test.FixedActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".test.TestActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".test.DataBaseActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

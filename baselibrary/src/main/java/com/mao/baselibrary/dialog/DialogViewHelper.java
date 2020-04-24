@@ -29,7 +29,7 @@ class DialogViewHelper {
     public DialogViewHelper(Context context, int layoutResId) {
         this();
         // 两种都可以
-        //mContentView = View.inflate(context, layoutResId, null);
+        //mContentView = View.inflate(mContext, layoutResId, null);
         mContentView = LayoutInflater.from(context).inflate(layoutResId, null);
 
     }

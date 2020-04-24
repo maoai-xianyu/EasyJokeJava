@@ -18,7 +18,7 @@ import com.mao.baselibrary.ioc.ViewUtils;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    public Context context;
+    public Context mContext;
     public Activity activity;
 
     @Override
@@ -27,7 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         // 设置布局layout
         setContentView();
         ViewUtils.inject(this);
-        this.context = this;
+        this.mContext = this;
         this.activity = this;
         // 初始化头部
         initTitle();
