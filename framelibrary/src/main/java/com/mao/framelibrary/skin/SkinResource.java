@@ -57,7 +57,7 @@ public class SkinResource {
     public Drawable getDrawableByName(String resName) {
         try {
             int resId = mSkinResources.getIdentifier(resName, "drawable", mPackageName);
-            LogU.d(" resId  " + resId + " mPackageName " + mPackageName + " resName " + resName);
+            LogU.d(" resId  Drawable " + resId + " mPackageName " + mPackageName + " resName " + resName);
             Drawable drawable = mSkinResources.getDrawable(resId);
             return drawable;
         } catch (Resources.NotFoundException e) {
@@ -77,6 +77,7 @@ public class SkinResource {
 
         try {
             int resId = mSkinResources.getIdentifier(resName, "color", mPackageName);
+            LogU.d(" resId color " + resId + " mPackageName " + mPackageName + " resName " + resName);
             ColorStateList colorStateList = mSkinResources.getColorStateList(resId);
             return colorStateList;
         } catch (Resources.NotFoundException e) {
