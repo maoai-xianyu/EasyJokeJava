@@ -15,6 +15,7 @@ import com.mao.baselibrary.ioc.ViewById;
 import com.mao.framelibrary.BaseSkinActivity;
 import com.mao.framelibrary.DefaultNavigationBar;
 import com.mao.framelibrary.skin.SkinManager;
+import com.mao.framelibrary.skin.SkinResource;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -118,6 +119,11 @@ public class MainActivity extends BaseSkinActivity {
         }
 
 
+    }
+    @Override
+    public void changeSkin(SkinResource skinResource){
+        // 做一些第三方的改变，还有自定义view的属性的修改
+        ToastUtils.show("换肤了");
     }
 
 }

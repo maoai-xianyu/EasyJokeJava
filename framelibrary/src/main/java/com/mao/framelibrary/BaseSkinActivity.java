@@ -17,8 +17,10 @@ import androidx.core.view.ViewCompat;
 import com.mao.baselibrary.base.BaseActivity;
 import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.framelibrary.skin.SkinManager;
+import com.mao.framelibrary.skin.SkinResource;
 import com.mao.framelibrary.skin.attr.SkinAttr;
 import com.mao.framelibrary.skin.attr.SkinView;
+import com.mao.framelibrary.skin.callback.ISkinChangeListener;
 import com.mao.framelibrary.skin.support.SkinAppCompatViewInflater;
 import com.mao.framelibrary.skin.support.SkinAppCompatViewInflaterAndroid23;
 import com.mao.framelibrary.skin.support.SkinAppCompatViewInflaterNew;
@@ -34,7 +36,7 @@ import java.util.List;
  * @time 2020-04-16 18:04
  * @Description 插件式换肤
  */
-public abstract class BaseSkinActivity extends BaseActivity implements LayoutInflater.Factory2 {
+public abstract class BaseSkinActivity extends BaseActivity implements LayoutInflater.Factory2, ISkinChangeListener {
 
     private final static String TAG = "BaseSkinActivity";
 
@@ -111,6 +113,9 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
             SkinView skinView = new SkinView(view, skinAttrs);
             // 3. 统一交给SkinManager管理
             managerSkinView(skinView);
+
+            // 4. 判断要不要换肤
+            SkinManager.getInstance().checkChangeSkin(skinView);
         }
 
         return view;
@@ -126,6 +131,17 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
             SkinManager.getInstance().register(this, skinViews);
         }
         skinViews.add(skinView);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        SkinManager.getInstance().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void changeSkin(SkinResource skinResource) {
 
     }
 
@@ -154,7 +170,7 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
 
     // 用android-24 的源码
     public View createView24(View parent, final String name, @NonNull Context context,
-                           @NonNull AttributeSet attrs) {
+                             @NonNull AttributeSet attrs) {
         final boolean isPre21 = Build.VERSION.SDK_INT < 21;
 
         if (mSkinAppCompatViewInflater == null) {
@@ -201,7 +217,7 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
 
 
     public View createView23(View parent, final String name, @NonNull Context context,
-                           @NonNull AttributeSet attrs) {
+                             @NonNull AttributeSet attrs) {
         final boolean isPre21 = Build.VERSION.SDK_INT < 21;
 
         if (mSkinAppCompatViewInflaterAndroid23 == null) {
@@ -241,4 +257,5 @@ public abstract class BaseSkinActivity extends BaseActivity implements LayoutInf
             parent = parent.getParent();
         }
     }
+
 }

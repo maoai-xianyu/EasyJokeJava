@@ -42,7 +42,7 @@ public class LoadingActivity extends BaseSkinActivity {
         setContentView(R.layout.activity_loading);
     }
 
-    @OnClick({R.id.tv, R.id.tvP, R.id.tvFix})
+    @OnClick({R.id.tv, R.id.tvP, R.id.tvFix,R.id.tvData})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv:
