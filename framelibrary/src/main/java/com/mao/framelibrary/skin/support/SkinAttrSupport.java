@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
+import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.framelibrary.skin.attr.SkinAttr;
 import com.mao.framelibrary.skin.attr.SkinType;
 
@@ -35,10 +36,12 @@ public class SkinAttrSupport {
             String attributeValue = attrs.getAttributeValue(index);
 
             // attributeName id 值 attributeValue @2131165318
-            // LogU.d("属性名称的 attributeName " + attributeName + " 值 attributeValue " + attributeValue);
+             LogU.d("属性名称的 attributeName " + attributeName + " 值 attributeValue " + attributeValue);
 
             // 只获取重要的信息
             SkinType skinType = getSkinType(attributeName);
+
+            LogU.d("属性名称的 skinType " + skinType +" skinType != null "+(skinType != null));
             if (skinType != null) {
                 // 资源名称 目前只有 attributeValue 是一个 @int 类型
                 String resName = getResName(context, attributeValue);
@@ -81,6 +84,12 @@ public class SkinAttrSupport {
     private static SkinType getSkinType(String attributeName) {
 
         SkinType[] skinTypes = SkinType.values();
+
+
+        for (SkinType skinType : skinTypes){
+
+            LogU.d(" skinType === "+skinType.getResName() +" attributeName "+attributeName);
+        }
         for (SkinType skinType : skinTypes) {
             if (skinType.getResName().equals(attributeName)) {
                 return skinType;

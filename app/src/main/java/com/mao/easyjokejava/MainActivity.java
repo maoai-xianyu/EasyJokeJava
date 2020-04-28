@@ -1,32 +1,26 @@
 package com.mao.easyjokejava;
 
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.baselibrary.baseUtils.ToastUtils;
 import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
+import com.mao.easyjokejava.test.MessageService;
 import com.mao.framelibrary.BaseSkinActivity;
 import com.mao.framelibrary.DefaultNavigationBar;
-import com.mao.framelibrary.skin.SkinManager;
-import com.mao.framelibrary.skin.SkinResource;
-
-import java.io.File;
-import java.lang.reflect.Method;
 
 public class MainActivity extends BaseSkinActivity {
 
 
     @ViewById(R.id.tv)
     private TextView mTv;
-    @ViewById(R.id.iv)
-    private ImageView mIv;
 
     @Override
     protected void initData() {
@@ -35,11 +29,38 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initView() {
-        mTv.setText("ICO");
 
-        LogU.d("mIv " + mIv);
+        startService(new Intent(this, MessageService.class));
+        Intent mIntent = new Intent(this, MessageService.class);
+        bindService(mIntent, conn, Context.BIND_AUTO_CREATE);
+
+
+        Intent intent = new Intent();
+        intent.setAction("com.study.aidl.user");
+        // 在Android 5.0之后google出于安全的角度禁止了隐式声明Intent来启动Service.也禁止使用Intent filter.否则就会抛个异常出来
+        intent.setPackage("com.mao.easyjokejava");
+        bindService(intent, conn, Context.BIND_AUTO_CREATE);
+
+        /*Intent mIntent = new Intent(this, MessageService.class);
+        // 请求绑定连接 服务端
+        bindService(mIntent, conn, Context.BIND_AUTO_CREATE);*/
 
     }
+
+    private UserAidl mUserAidlProxy;
+
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            // 连接好， service 就是服务端给我我们的 IBinder
+            mUserAidlProxy = UserAidl.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     @Override
     protected void initTitle() {
@@ -64,66 +85,30 @@ public class MainActivity extends BaseSkinActivity {
     }
 
 
-    @OnClick({R.id.tv, R.id.change, R.id.changeDefault, R.id.jump})
+    @OnClick({R.id.tv, R.id.tvP})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv:
-                LogU.d("换肤");
-
-                // 读取本地一个  .skin里面的资源
 
                 try {
-                    Resources superR = getResources();
-                    // 创建本地下载好的资源皮肤
-                    AssetManager assetManager = AssetManager.class.newInstance();
-                    Method addAssetPath = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
-                    //addAssetPath.setAccessible(true); // 私有的
-                    // 反射执行方法
-                    addAssetPath.invoke(assetManager, Environment.getExternalStorageDirectory().getAbsolutePath()
-                            + File.separator + "easyJoke.skin");
-
-                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                            + File.separator + "easyJoke.skin");
-
-                    if (file.exists()) {
-                        LogU.d("文件存在");
-                    }
-
-                    Resources resources = new Resources(assetManager, superR.getDisplayMetrics(), superR.getConfiguration());
-
-                    // 获取资源
-                    int drawableId = resources.getIdentifier("lichun", "drawable", "com.mao.easyjokejavaskin");
-                    // 用自己的资源获取图片
-                    Drawable drawable = resources.getDrawable(drawableId);
-                    mIv.setImageDrawable(drawable);
-                } catch (Exception e) {
+                    ToastUtils.show("用户名 "+ mUserAidlProxy.getUsername());
+                } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 break;
 
-            case R.id.change:
-                // 真正开发的过程，需要从服务器下载对应的皮肤
-                String skinPath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + File.separator + "easyJokeChange.skin";
-                File file = new File(skinPath);
-                LogU.d("easyJokeChange.skin  是否存在 "+file.exists());
-                int resultChange = SkinManager.getInstance().loadSkin(skinPath);
-                break;
-            case R.id.changeDefault:
-                int resultDefault = SkinManager.getInstance().restoreDefault();
-                break;
-            case R.id.jump:
-                startActivity(MainActivity.class);
+            case R.id.tvP:
+                try {
+                    ToastUtils.show("密码 "+ mUserAidlProxy.getUserPsw());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 break;
 
         }
 
 
     }
-    @Override
-    public void changeSkin(SkinResource skinResource){
-        // 做一些第三方的改变，还有自定义view的属性的修改
-        ToastUtils.show("换肤了");
-    }
+
 
 }

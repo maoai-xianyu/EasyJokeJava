@@ -8,6 +8,7 @@ import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
 import com.mao.easyjokejava.test.DataBaseActivity;
 import com.mao.easyjokejava.test.FixedActivity;
+import com.mao.easyjokejava.test.SkinChangeActivity;
 import com.mao.framelibrary.BaseSkinActivity;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -42,7 +43,7 @@ public class LoadingActivity extends BaseSkinActivity {
         setContentView(R.layout.activity_loading);
     }
 
-    @OnClick({R.id.tv, R.id.tvP, R.id.tvFix,R.id.tvData})
+    @OnClick({R.id.tv, R.id.tvP, R.id.tvFix, R.id.tvData, R.id.tvSkin})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv:
@@ -53,6 +54,9 @@ public class LoadingActivity extends BaseSkinActivity {
                 break;
             case R.id.tvData:
                 startActivity(DataBaseActivity.class, true);
+                break;
+            case R.id.tvSkin:
+                startActivity(SkinChangeActivity.class, true);
                 break;
             case R.id.tvP:
                 AndPermission.with(this)
