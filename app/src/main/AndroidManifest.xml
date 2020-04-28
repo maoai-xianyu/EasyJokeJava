@@ -34,6 +34,10 @@
             android:theme="@style/AppTheme" />
 
         <activity
+            android:name=".test.ServiceActivity"
+            android:theme="@style/AppTheme" />
+
+        <activity
             android:name=".test.SkinChangeActivity"
             android:theme="@style/AppTheme" />
         <activity
