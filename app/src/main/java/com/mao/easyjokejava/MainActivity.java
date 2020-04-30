@@ -1,18 +1,16 @@
 package com.mao.easyjokejava;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.os.RemoteException;
+import android.os.Build;
 import android.view.View;
 import android.widget.TextView;
 
 import com.mao.baselibrary.baseUtils.ToastUtils;
 import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
-import com.mao.easyjokejava.test.MessageService;
+import com.mao.easyjokejava.test.service.GuardService;
+import com.mao.easyjokejava.test.service.JobWakeUpService;
+import com.mao.easyjokejava.test.service.MsgService;
 import com.mao.framelibrary.BaseSkinActivity;
 import com.mao.framelibrary.DefaultNavigationBar;
 
@@ -24,43 +22,32 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initData() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            startForegroundService(new Intent(this, MsgService.class));
+            startForegroundService(new Intent(this, GuardService.class));
+        }else {
+            startService(new Intent(this, MsgService.class));
+            startService(new Intent(this, GuardService.class));
+        }
+
+        if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP){
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                startForegroundService(new Intent(this, JobWakeUpService.class));
+            }else {
+                startService(new Intent(this, JobWakeUpService.class));
+            }*/
+            startService(new Intent(this, JobWakeUpService.class));
+        }
+
     }
 
 
     @Override
     protected void initView() {
 
-        startService(new Intent(this, MessageService.class));
-        Intent mIntent = new Intent(this, MessageService.class);
-        bindService(mIntent, conn, Context.BIND_AUTO_CREATE);
-
-
-        Intent intent = new Intent();
-        intent.setAction("com.study.aidl.user");
-        // 在Android 5.0之后google出于安全的角度禁止了隐式声明Intent来启动Service.也禁止使用Intent filter.否则就会抛个异常出来
-        intent.setPackage("com.mao.easyjokejava");
-        bindService(intent, conn, Context.BIND_AUTO_CREATE);
-
-        /*Intent mIntent = new Intent(this, MessageService.class);
-        // 请求绑定连接 服务端
-        bindService(mIntent, conn, Context.BIND_AUTO_CREATE);*/
-
     }
 
-    private UserAidl mUserAidlProxy;
-
-    private ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            // 连接好， service 就是服务端给我我们的 IBinder
-            mUserAidlProxy = UserAidl.Stub.asInterface(service);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
 
     @Override
     protected void initTitle() {
@@ -90,19 +77,11 @@ public class MainActivity extends BaseSkinActivity {
         switch (view.getId()) {
             case R.id.tv:
 
-                try {
-                    ToastUtils.show("用户名 "+ mUserAidlProxy.getUsername());
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+
                 break;
 
             case R.id.tvP:
-                try {
-                    ToastUtils.show("密码 "+ mUserAidlProxy.getUserPsw());
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+
                 break;
 
         }

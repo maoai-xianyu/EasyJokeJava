@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!-- 可选 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <!--JobService权限-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".BaseJokeApplication"
@@ -25,12 +29,16 @@
             </intent-filter>
         </activity>
 
-         <activity
-             android:name=".MainActivity"
-             android:launchMode="singleTask" />
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask" />
 
         <activity
             android:name=".test.FixedActivity"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".test.ServiceActivity"
             android:theme="@style/AppTheme" />
 
         <activity
@@ -47,13 +55,26 @@
             android:name=".test.MessageService"
             android:process=":remote" />-->
 
-        <service android:name=".test.MessageService" >
+        <service android:name=".test.MessageService">
             <intent-filter>
                 <action android:name="com.study.aidl.user" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+
+        <service android:name=".test.service.MsgService" />
+
+        <service
+            android:name=".test.service.GuardService"
+            android:process=":guardService" />
+
+        <service
+            android:name=".test.service.JobWakeUpService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

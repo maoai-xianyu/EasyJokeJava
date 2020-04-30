@@ -32,6 +32,13 @@
         android:padding="20dp"
         android:text="切换应用皮肤" />
 
+    <TextView
+        android:id="@+id/tvService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="AIDl" />
+
 
     <TextView
         android:id="@+id/tvData"
