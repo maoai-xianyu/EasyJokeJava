@@ -31,9 +31,9 @@ public class ServiceActivity extends BaseSkinActivity {
     @Override
     protected void initView() {
 
-        startService(new Intent(this, MessageService.class));
+        /*startService(new Intent(this, MessageService.class));
         Intent mIntent = new Intent(this, MessageService.class);
-        bindService(mIntent, conn, Context.BIND_AUTO_CREATE);
+        bindService(mIntent, conn, Context.BIND_AUTO_CREATE);*/
 
 
         Intent intent = new Intent();
