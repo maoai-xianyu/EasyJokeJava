@@ -50,6 +50,9 @@
         <activity
             android:name=".test.DataBaseActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".test.ServiceProtectActivity"
+            android:theme="@style/AppTheme" />
 
         <!--<service
             android:name=".test.MessageService"

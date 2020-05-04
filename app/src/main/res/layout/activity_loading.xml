@@ -15,6 +15,14 @@
         android:text="跳转MainActivity" />
 
 
+    <TextView
+        android:id="@+id/tvProtect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="线程保护" />
+
+
 
     <TextView
         android:id="@+id/tvFix"
