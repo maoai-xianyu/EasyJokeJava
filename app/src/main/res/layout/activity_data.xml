@@ -15,4 +15,11 @@
         android:padding="20dp"
         android:text="测试弹框" />
 
+    <TextView
+        android:id="@+id/tvContext"
+        android:textColor="@color/c_e41e26"
+        tools:text="测试"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </LinearLayout>

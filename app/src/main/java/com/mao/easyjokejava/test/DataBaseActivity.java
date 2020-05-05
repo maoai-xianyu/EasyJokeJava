@@ -27,6 +27,8 @@ public class DataBaseActivity extends BaseSkinActivity {
 
     @ViewById(R.id.tv)
     private TextView mTv;
+    @ViewById(R.id.tvContext)
+    private TextView tvContext;
 
     @Override
     protected void initData() {
@@ -35,20 +37,29 @@ public class DataBaseActivity extends BaseSkinActivity {
                 .cache(true)
                 .addParam("page", 1)
                 .addParam("count", 20)
-                .get().execute(new HttpCallBack<NewsModel>() {
+                .get()
+                .execute(new HttpCallBack<NewsModel>() {
 
-            @Override
-            public void onError(Exception e) {
+                    @Override
+                    public void onError(Exception e) {
 
-            }
+                    }
 
-            @Override
-            public void onSuccess(NewsModel result) {
+                    @Override
+                    public void onSuccess(NewsModel result) {
 
-                LogU.d("直接转对象 result " + result);
+                        // 需要切换线程
+                        LogU.d("直接转对象 result " + result);
 
-            }
-        });
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvContext.setText(result.toString());
+
+                            }
+                        });
+                    }
+                });
 
 
         // 问题：

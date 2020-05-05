@@ -85,6 +85,11 @@ public abstract class AbsNavigationBar<P extends AbsNavigationBar.Builder.AbsNav
     }
 
 
+    protected void setVisibility(int viewId, int visible) {
+        findViewById(viewId).setVisibility(visible);
+    }
+
+
     protected void setOnClickListener(int viewId, View.OnClickListener listener) {
         findViewById(viewId).setOnClickListener(listener);
     }

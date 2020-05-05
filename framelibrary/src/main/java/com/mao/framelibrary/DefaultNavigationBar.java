@@ -31,9 +31,9 @@ public class DefaultNavigationBar extends AbsNavigationBar<DefaultNavigationBar.
         setText(R.id.right_text, getParams().mRightText);
         setOnClickListener(R.id.right_text, getParams().mRightCLickListener);
         setOnClickListener(R.id.back, getParams().mLeftCLickListener);
+        setVisibility(R.id.back, getParams().mBackVisible);
 
     }
-
 
     public static class Builder extends AbsNavigationBar.Builder {
 
@@ -68,9 +68,14 @@ public class DefaultNavigationBar extends AbsNavigationBar<DefaultNavigationBar.
             return this;
         }
 
-
         public Builder setRightIcon(int rRes) {
             P.mRightRes = rRes;
+            return this;
+        }
+
+
+        public Builder hideBackIcon() {
+            P.mBackVisible = View.INVISIBLE;
             return this;
         }
 
@@ -88,6 +93,7 @@ public class DefaultNavigationBar extends AbsNavigationBar<DefaultNavigationBar.
             public String mTitle;
             public String mRightText;
             public int mRightRes;
+            public int mBackVisible = View.VISIBLE;
 
             // 2. 放置所有效果
 

@@ -50,6 +50,8 @@ dependencies {
     implementation project(path: ':framelibrary')
     implementation 'com.yanzhenjie:permission:2.0.3'
     implementation 'org.litepal.android:java:3.0.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     /*implementation 'org.xutils:xutils:3.8.8'
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'*/
