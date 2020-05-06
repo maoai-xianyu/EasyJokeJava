@@ -9,17 +9,15 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.reflect.TypeToken;
 import com.mao.baselibrary.base.BaseFragment;
-import com.mao.baselibrary.baseUtils.GsonU;
 import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.baselibrary.http.HttpUtils;
 import com.mao.baselibrary.ioc.ViewById;
 import com.mao.easyjokejava.R;
 import com.mao.easyjokejava.adapter.DiscoverListAdapter;
-import com.mao.easyjokejava.model.BaseEntity;
 import com.mao.easyjokejava.model.DiscoverResult;
-import com.mao.framelibrary.HttpStringCallBack;
+import com.mao.easyjokejava.model.NewsModel;
+import com.mao.framelibrary.HttpCallBack;
 import com.mao.framelibrary.banner.BannerAdapter;
 import com.mao.framelibrary.banner.BannerView;
 import com.mao.framelibrary.banner.BannerViewPager;
@@ -47,7 +45,7 @@ public class FindFragment extends BaseFragment implements BannerViewPager.Banner
     protected void initData() {
         // https://api.apiopen.top/getWangYiNews?page=1&count=20&version=2.0
 
-        HttpUtils.with(context).url("https://api.apiopen.top/getWangYiNews")
+        /*HttpUtils.with(context).url("https://api.apiopen.top/getWangYiNews")
                 .addParam("page", 1)
                 .addParam("count", 40)
                 .cache(true)
@@ -60,28 +58,48 @@ public class FindFragment extends BaseFragment implements BannerViewPager.Banner
                     @Override
                     public void onSuccess(String result) {
 
-                        LogU.d(" result "+result);
-                        LogU.d(" result thread "+Thread.currentThread());
+                        LogU.d(" result " + result);
+                        BaseEntity<DiscoverResult> convert = GsonU.convert(result, new TypeToken<BaseEntity<DiscoverResult>>() {
+                        }.getType());
+
+                        // 先显示列表
+                        List<DiscoverResult> resultList = convert.getResult();
+
+                        List<DiscoverResult> banner = new ArrayList<>(resultList.subList(0, 4));
+
+                        List<DiscoverResult> listContainer = new ArrayList<>(resultList.subList(4, resultList.size()));
+
+                        showListData(listContainer);
+                        addBannerView(banner);
+
+                    }
+                });*/
 
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                LogU.d(" result thread  main "+Thread.currentThread());
-                                BaseEntity<DiscoverResult> convert = GsonU.convert(result, new TypeToken<BaseEntity<DiscoverResult>>() {
-                                }.getType());
+        HttpUtils.with(context).url("https://api.apiopen.top/getWangYiNews")
+                .addParam("page", 1)
+                .addParam("count", 40)
+                .cache(true)
+                .execute(new HttpCallBack<NewsModel>() {
+                    @Override
+                    public void onError(Exception e) {
 
-                                // 先显示列表
-                                List<DiscoverResult> resultList = convert.getResult();
+                    }
 
-                                List<DiscoverResult> banner = new ArrayList<>(resultList.subList(0, 4));
+                    @Override
+                    public void onSuccess(NewsModel result) {
 
-                                List<DiscoverResult> listContainer = new ArrayList<>(resultList.subList(4, resultList.size()));
+                        LogU.d(" result " + result);
 
-                                showListData(listContainer);
-                                addBannerView(banner);
-                            }
-                        });
+                        // 先显示列表
+                        List<DiscoverResult> resultList = result.getResult();
+
+                        List<DiscoverResult> banner = new ArrayList<>(resultList.subList(0, 4));
+
+                        List<DiscoverResult> listContainer = new ArrayList<>(resultList.subList(4, resultList.size()));
+
+                        showListData(listContainer);
+                        addBannerView(banner);
 
                     }
                 });

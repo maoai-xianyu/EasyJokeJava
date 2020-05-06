@@ -18,7 +18,7 @@ public class NewsModel {
 
     private int code;
     private String message;
-    private List<ResultBean> result;
+    private List<DiscoverResult> result;
 
     public int getCode() {
         return code;
@@ -36,68 +36,12 @@ public class NewsModel {
         this.message = message;
     }
 
-    public List<ResultBean> getResult() {
+    public List<DiscoverResult> getResult() {
         return result;
     }
 
-    public void setResult(List<ResultBean> result) {
+    public void setResult(List<DiscoverResult> result) {
         this.result = result;
-    }
-
-    public static class ResultBean {
-        /**
-         * path : https://news.163.com/20/0419/09/FAILN3KD0001899O.html
-         * image : http://cms-bucket.ws.126.net/2020/0419/29fa7d4ap00q90hsg00cxc000s600e3c.png?imageView&thumbnail=140y88&quality=85
-         * title : ＂拍好看点＂!贵州女子醉驾被查 全程撒娇还比剪刀手
-         * passtime : 2020-04-19 10:00:33
-         */
-
-        private String path;
-        private String image;
-        private String title;
-        private String passtime;
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getPasstime() {
-            return passtime;
-        }
-
-        public void setPasstime(String passtime) {
-            this.passtime = passtime;
-        }
-
-        @Override
-        public String toString() {
-            return "ResultBean{" +
-                    "path='" + path + '\'' +
-                    ", image='" + image + '\'' +
-                    ", title='" + title + '\'' +
-                    ", passtime='" + passtime + '\'' +
-                    '}';
-        }
     }
 
     @Override

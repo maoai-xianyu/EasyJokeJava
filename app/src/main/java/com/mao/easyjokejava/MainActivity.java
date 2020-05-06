@@ -1,6 +1,9 @@
 package com.mao.easyjokejava;
 
+import android.view.View;
+
 import com.mao.baselibrary.ioc.OnClick;
+import com.mao.easyjokejava.activity.TestImageActivity;
 import com.mao.easyjokejava.fragment.FindFragment;
 import com.mao.easyjokejava.fragment.HomeFragment;
 import com.mao.easyjokejava.fragment.MessageFragment;
@@ -40,6 +43,13 @@ public class MainActivity extends BaseSkinActivity {
         DefaultNavigationBar navigationBar = new
                 DefaultNavigationBar.Builder(this)
                 .setTitle("首页")
+                .setRightText("图片")
+                .setRightClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(TestImageActivity.class);
+                    }
+                })
                 .hideBackIcon()
                 .builder();
 

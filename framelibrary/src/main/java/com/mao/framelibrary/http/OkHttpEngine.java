@@ -1,6 +1,8 @@
 package com.mao.framelibrary.http;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import com.mao.baselibrary.baseUtils.LogU;
@@ -33,6 +35,9 @@ import okhttp3.Response;
 public class OkHttpEngine implements IHttpEngine {
 
     private static OkHttpClient mOkHttpClient = new OkHttpClient();
+
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+
 
 
     @Override
@@ -151,13 +156,19 @@ public class OkHttpEngine implements IHttpEngine {
 
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callBack.onError(e);
+            public void onFailure(Call call, final IOException e) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callBack.onError(e);
+                    }
+                });
+
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String resultJson = response.body().string();
+                final String resultJson = response.body().string();
                 // 获取数据之后会执行成功的方法
                 // 2. 每次获取到的数据线，先比对
 
@@ -172,7 +183,13 @@ public class OkHttpEngine implements IHttpEngine {
                     }
                 }
 
-                callBack.onSuccess(resultJson);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callBack.onSuccess(resultJson);
+                    }
+                });
+
                 LogU.d("Get返回结果：" + resultJson);
                 // 缓存数据
                 if (cache) {

@@ -37,6 +37,9 @@
             android:name=".MainActivity"
             android:launchMode="singleTask" />
 
+        <activity android:name=".activity.SelectImageActivity" />
+        <activity android:name=".activity.TestImageActivity" />
+
         <activity
             android:name=".test.FixedActivity"
             android:theme="@style/AppTheme" />
