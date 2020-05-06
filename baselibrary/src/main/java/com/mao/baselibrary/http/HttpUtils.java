@@ -3,6 +3,8 @@ package com.mao.baselibrary.http;
 import android.content.Context;
 import android.util.ArrayMap;
 
+import com.mao.baselibrary.baseUtils.LogU;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -171,6 +173,8 @@ public class HttpUtils {
         if (genType != null) {
             params = ((ParameterizedType) genType).getActualTypeArguments();
         }
+
+        LogU.d("(Class<?>) params[0]" +(Class<?>) params[0]);
         return (Class<?>) params[0];
     }
 }

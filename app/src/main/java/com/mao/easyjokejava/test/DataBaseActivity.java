@@ -51,13 +51,7 @@ public class DataBaseActivity extends BaseSkinActivity {
                         // 需要切换线程
                         LogU.d("直接转对象 result " + result);
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                tvContext.setText(result.toString());
-
-                            }
-                        });
+                        tvContext.setText(result.toString());
                     }
                 });
 
