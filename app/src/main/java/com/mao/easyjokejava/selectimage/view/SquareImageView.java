@@ -1,25 +1,25 @@
-package com.mao.easyjokejava.view;
+package com.mao.easyjokejava.selectimage.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 /**
  * Email 240336124@qq.com
  * Created by Darren on 2017/4/9.
  * Version 1.0
- * Description: 正方形的FrameLayout容器
+ * Description:正方形的图片
  */
-public class SquareFrameLayout extends FrameLayout{
-    public SquareFrameLayout(Context context) {
+public class SquareImageView extends ImageView {
+    public SquareImageView(Context context) {
         super(context);
     }
 
-    public SquareFrameLayout(Context context, AttributeSet attrs) {
+    public SquareImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SquareFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SquareImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -30,6 +30,6 @@ public class SquareFrameLayout extends FrameLayout{
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = width;
         // 设置宽高为一样
-        setMeasuredDimension(width,height);
+        setMeasuredDimension(width, height);
     }
 }

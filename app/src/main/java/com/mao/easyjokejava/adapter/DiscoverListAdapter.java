@@ -23,7 +23,7 @@ public class DiscoverListAdapter extends CommonRecyclerAdapter<DiscoverResult> {
     }
 
     @Override
-    public void convert(ViewHolder holder, DiscoverResult item) {
+    public void convert(ViewHolder holder, DiscoverResult item,int position) {
         // 显示数据
        /* String str = item.getSubscribe_count() + " 订阅 | " +
                 "总帖数 <font color='#FF678D'>" + item.getTotal_updates() + "</font>";*/

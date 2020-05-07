@@ -1,19 +1,24 @@
-package com.mao.easyjokejava.activity;
+package com.mao.easyjokejava.selectimage;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mao.baselibrary.baseUtils.StatusBarUtil;
+import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
 import com.mao.easyjokejava.R;
-import com.mao.easyjokejava.adapter.SelectImageListAdapter;
 import com.mao.framelibrary.BaseSkinActivity;
 import com.mao.framelibrary.DefaultNavigationBar;
 
@@ -24,11 +29,15 @@ import java.util.ArrayList;
  * @time 2020-05-06 11:41
  * @Description 图片选择的Activity
  */
-public class SelectImageActivity extends BaseSkinActivity {
+public class SelectImageActivity extends BaseSkinActivity implements View.OnClickListener {
 
 
     @ViewById(R.id.image_list_rv)
     private RecyclerView mImageListRv;
+    @ViewById(R.id.select_preview)
+    private TextView mSelectPreview;
+    @ViewById(R.id.select_num)
+    private TextView mSelectNum;
 
 
     // 带过来的Key
@@ -78,6 +87,28 @@ public class SelectImageActivity extends BaseSkinActivity {
 
         // 2.初始化本地图片数据
         initImageList();
+
+        // 3. 改变现实
+        exChangeViewShow();
+
+    }
+
+
+    // 改变布局显示，需要及时更新
+    private void exChangeViewShow() {
+        // 预览是不是可以点击，显示什么颜色
+        if (mResultList.size() > 0) {
+            // 至少选择一张
+            mSelectPreview.setEnabled(true);
+            mSelectPreview.setOnClickListener(this);
+        } else {
+            mSelectPreview.setEnabled(false);
+            mSelectPreview.setOnClickListener(null);
+        }
+
+
+        // 中间图片显示
+        mSelectNum.setText(mResultList.size() + "/" + mMaxCount);
 
     }
 
@@ -151,7 +182,13 @@ public class SelectImageActivity extends BaseSkinActivity {
      * @param images
      */
     private void showImageList(ArrayList<String> images) {
-        SelectImageListAdapter listAdapter = new SelectImageListAdapter(this, images);
+        SelectImageListAdapter listAdapter = new SelectImageListAdapter(this, images, mResultList,mMaxCount);
+        listAdapter.setSelectImageListener(new SelectImageListener() {
+            @Override
+            public void select() {
+                exChangeViewShow();
+            }
+        });
         mImageListRv.setLayoutManager(new GridLayoutManager(this, 4));
         mImageListRv.setAdapter(listAdapter);
     }
@@ -169,6 +206,8 @@ public class SelectImageActivity extends BaseSkinActivity {
                 DefaultNavigationBar.Builder(this)
                 .setTitle("选择图片")
                 .builder();
+        // 改变状态栏的颜色
+        StatusBarUtil.statusBarTintColor(this, Color.parseColor("#261f1f"));
 
     }
 
@@ -176,5 +215,32 @@ public class SelectImageActivity extends BaseSkinActivity {
     protected void setContentView() {
 
         setContentView(R.layout.activity_image_selector);
+    }
+
+    @Override
+    public void onClick(View v) {
+        // 预览
+
+    }
+
+    @OnClick(R.id.select_finish)
+    private void sureFinish(View view){
+
+        // 把选择好的图片传过去
+        Intent intent = new Intent();
+        intent.putStringArrayListExtra(EXTRA_RESULT,mResultList);
+        setResult(RESULT_OK,intent);
+        finish();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 1. 第一个要把图片加到集合里面
+
+        // 2. 调用sureSelect()
+
+        // 3. 通知系统本地有图片改变了，下次进来要找到这张图片
     }
 }
