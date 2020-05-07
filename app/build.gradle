@@ -26,11 +26,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk{
-
-            moduleName "ndkdemotest-jni"
-            abiFilters  "armeabi-v7a", "x86"
+            abiFilters  "armeabi-v7a"
 
         }
+
     }
 
     buildTypes {
@@ -40,11 +39,11 @@ android {
         }
     }
 
-    externalNativeBuild {
+   /* externalNativeBuild {
         ndkBuild {
             path 'src/main/jni/Android.mk'
         }
-    }
+    }*/
 
     sourceSets {
         main {
@@ -53,28 +52,29 @@ android {
         }
     }
 
-    /*
-    task ndkBuild(type: Exec) {//设置新的so的生成目录
-        commandLine "//Users//zhangkun//Library//Android//sdk//ndk//16.1.4479499//ndk-build",
-                'NDK_PROJECT_PATH=build/intermediates/ndk',
-                'NDK_LIBS_OUT=libs',
-                'APP_BUILD_SCRIPT=jni/Android.mk',
-                'NDK_APPLICATION_MK=jni/Application.mk'
+
+    /*task ndkBuild(type: Exec) {//设置新的so的生成目录
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        commandLine "/Users/zhangkun/Library/Android/sdk/ndk/16.1.4479499/ndk-build",
+                "NDK_PROJECT_PATH=$projectDir.absolutePath/build/intermediates/ndk",
+                "NDK_LIBS_OUT=$projectDir.absolutePath/libs",
+                "APP_BUILD_SCRIPT=$projectDir.absolutePath/src/main/jni/Android.mk",
+                "NDK_APPLICATION_MK=$projectDir.absolutePath/src/main/jni/Application.mk"
     }
 
     tasks.withType(JavaCompile) {
         compileTask -> compileTask.dependsOn ndkBuild
-    }
-
-    task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
+    }*/
+    /*task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
         Properties properties = new Properties()
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
         def ndkDir = properties.getProperty('ndk.dir')
         commandLine "$ndkDir/ndk-build",
-                "NDK_PROJECT_PATH=$projectDir.absolutePath\\build",
-                "NDK_LIBS_OUT=$projectDir.absolutePath\\libs",
-                "APP_BUILD_SCRIPT=$projectDir.absolutePath\\src\\main\\jni\\Android.mk",
-                "NDK_APPLICATION_MK=$projectDir.absolutePath\\src\\main\\jni\\Application.mk"
+                "NDK_PROJECT_PATH=$projectDir.absolutePath/build",
+                "NDK_LIBS_OUT=$projectDir.absolutePath/libs",
+                "APP_BUILD_SCRIPT=$projectDir.absolutePath/src/main/jni/Android.mk",
+                "NDK_APPLICATION_MK=$projectDir.absolutePath/src/main/jni/Application.mk"
     }*/
 
     compileOptions {

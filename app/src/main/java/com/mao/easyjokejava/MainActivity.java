@@ -2,8 +2,6 @@ package com.mao.easyjokejava;
 
 import android.view.View;
 
-import com.hc.essay.library.util.NDKTools;
-import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.baselibrary.ioc.OnClick;
 import com.mao.easyjokejava.activity.TestImageActivity;
 import com.mao.easyjokejava.fragment.FindFragment;
@@ -28,11 +26,6 @@ public class MainActivity extends BaseSkinActivity {
         mFragmentHelper = new FragmentManagerHelper(getSupportFragmentManager(), R.id.main_tab_fl);
         mHomeFragment = new HomeFragment();
         mFragmentHelper.add(mHomeFragment);
-
-
-        String text = NDKTools.getStringFromNDK();
-        LogU.d("NDK ..." + text);
-
 
     }
 

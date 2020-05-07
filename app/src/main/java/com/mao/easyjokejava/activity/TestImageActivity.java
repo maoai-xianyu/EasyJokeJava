@@ -1,16 +1,20 @@
 package com.mao.easyjokejava.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.hc.essay.library.util.ImageUtil;
 import com.mao.baselibrary.baseUtils.LogU;
 import com.mao.easyjokejava.R;
 import com.mao.easyjokejava.selectimage.ImageSelector;
 import com.mao.easyjokejava.selectimage.SelectImageActivity;
 import com.mao.framelibrary.BaseSkinActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -68,6 +72,25 @@ public class TestImageActivity extends BaseSkinActivity {
                 LogU.e(mImageList.toString());
             }
 
+        }
+    }
+
+
+    public void compressImg(View view){
+
+
+        // 把选择好的图片做了一下压缩
+        for (String path : mImageList) {
+            // 做优化  第一个decodeFile有可能会内存移除
+            // 一般后台会规定尺寸  800  小米 规定了宽度 720
+            // 上传的时候可能会多张 for循环 最好用线程池 （2-3）
+            Bitmap bitmap = ImageUtil.decodeFile(path);
+            // 调用写好的native方法
+            // 用Bitmap.compress压缩1/10
+            ImageUtil.compressBitmap(bitmap, 75,
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +
+                            new File(path).getName()
+            );
         }
     }
 }
