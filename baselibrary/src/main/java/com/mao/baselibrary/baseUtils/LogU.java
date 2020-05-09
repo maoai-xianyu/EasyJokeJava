@@ -20,6 +20,7 @@ public class LogU {
     }
 
     private static String createLog(String log) {
+
         StringBuffer buffer = new StringBuffer();
         buffer.append("[ ");
         buffer.append(Thread.currentThread().getName());

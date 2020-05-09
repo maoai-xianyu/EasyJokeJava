@@ -16,6 +16,14 @@
 
 
     <TextView
+        android:id="@+id/tvHook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="Hook跳过注册activity" />
+
+
+    <TextView
         android:id="@+id/tvProtect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

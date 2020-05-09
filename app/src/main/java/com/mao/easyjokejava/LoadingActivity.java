@@ -8,6 +8,7 @@ import com.mao.baselibrary.ioc.OnClick;
 import com.mao.baselibrary.ioc.ViewById;
 import com.mao.easyjokejava.test.DataBaseActivity;
 import com.mao.easyjokejava.test.FixedActivity;
+import com.mao.easyjokejava.test.HookActivity;
 import com.mao.easyjokejava.test.ServiceActivity;
 import com.mao.easyjokejava.test.ServiceProtectActivity;
 import com.mao.easyjokejava.test.SkinChangeActivity;
@@ -45,11 +46,14 @@ public class LoadingActivity extends BaseSkinActivity {
         setContentView(R.layout.activity_loading);
     }
 
-    @OnClick({R.id.tv, R.id.tvP, R.id.tvFix, R.id.tvData, R.id.tvSkin, R.id.tvService, R.id.tvProtect})
+    @OnClick({R.id.tv, R.id.tvHook, R.id.tvP, R.id.tvFix, R.id.tvData, R.id.tvSkin, R.id.tvService, R.id.tvProtect})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv:
                 startActivity(MainActivity.class, true);
+                break;
+            case R.id.tvHook:
+                startActivity(HookActivity.class, true);
                 break;
             case R.id.tvFix:
                 startActivity(FixedActivity.class, true);

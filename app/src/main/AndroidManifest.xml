@@ -55,6 +55,12 @@
             android:name=".test.TestActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".test.HookActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".test.HookProxyActivity"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".test.DataBaseActivity"
             android:theme="@style/AppTheme" />
         <activity
