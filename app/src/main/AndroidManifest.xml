@@ -55,6 +55,9 @@
             android:name=".test.TestActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".test.TestUpdateVersionActivity"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".test.HookActivity"
             android:theme="@style/AppTheme" />
         <activity
@@ -91,6 +94,18 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.mao.easyjokejava.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
     </application>
 
 </manifest>
