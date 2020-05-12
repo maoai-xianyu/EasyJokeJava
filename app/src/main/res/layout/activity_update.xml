@@ -14,4 +14,24 @@
         android:padding="20dp"
         android:text="这个是1.0的版本哦，我们准备更新版本" />
 
+    <Button
+        android:id="@+id/tvDiff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="生成差分包" />
+
+
+    <Button
+        android:id="@+id/tvPatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="合并差分包" />
+
+
+    <Button
+        android:id="@+id/tvInstall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="安装新版本" />
+
 </LinearLayout>

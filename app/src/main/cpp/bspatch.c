@@ -1,23 +1,40 @@
+/*-
+ * Copyright 2003-2005 Colin Percival
+ * All rights reserved
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted providing that the following conditions 
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #if 0
 __FBSDID("$FreeBSD: src/usr.bin/bsdiff/bspatch/bspatch.c,v 1.1 2005/08/06 01:59:06 cperciva Exp $");
 #endif
-
-// 很多文件没引入进来
-#include "bzlib.c"
-#include "crctable.c"
-#include "compress.c"
-#include "decompress.c"
-#include "randtable.c"
-#include "blocksort.c"
-#include "huffman.c"
+#include <jni.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <err.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "com_mao_easyjokejava_uitl_PatchUtils.h"
-
+#include "bzip2/bzlib.h"
+#include "bs.h"
 static off_t offtin(u_char *buf)
 {
 	off_t y;
@@ -35,10 +52,11 @@ static off_t offtin(u_char *buf)
 
 	return y;
 }
-// 第三方的合并方法
-int combine(int argc,char * argv[])
+
+int mypatch(int argc,char * argv[])
 {
 	FILE * f, * cpf, * dpf, * epf;
+
 	BZFILE * cpfbz2, * dpfbz2, * epfbz2;
 	int cbz2err, dbz2err, ebz2err;
 	int fd;
@@ -185,28 +203,4 @@ int combine(int argc,char * argv[])
 	return 0;
 }
 
-// copy com_mao_easyjokejava_uitl_PatchUtils.h 的合并方法的C实现
-JNIEXPORT void JNICALL Java_com_mao_easyjokejava_uitl_PatchUtils_combine
-		(JNIEnv *env, jclass jclz, jstring old_pak_path,
-		 jstring new_apk_path, jstring patch_path){
-	// 1.封装参数
-	int argc = 4;
-	char * argv[4];
-	// 1.1 转换  jstring -> char*
-	char* old_pak_cstr = (char*)(*env)->GetStringUTFChars(env,old_pak_path,NULL);
-	char* new_apk_cstr = (char*)(*env)->GetStringUTFChars(env,new_apk_path,NULL);
-	char* patch_cstr = (char*)(*env)->GetStringUTFChars(env,patch_path,NULL);
-	// 第0的位置随便给
-	argv[0] = "combine";
-	argv[1] = old_pak_cstr;
-	argv[2] = new_apk_cstr;
-	argv[3] = patch_cstr;
 
-	// 2.调用上面的方法  int argc,char * argv[]
-	combine(argc,argv);
-
-	// 3.释放资源
-	(*env)->ReleaseStringUTFChars(env,old_pak_path,old_pak_cstr);
-	(*env)->ReleaseStringUTFChars(env,new_apk_path,new_apk_cstr);
-	(*env)->ReleaseStringUTFChars(env,patch_path,patch_cstr);
-}

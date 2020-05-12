@@ -25,6 +25,14 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions"
+            }
+        }
+        ndk{
+            abiFilters "armeabi"
+        }
     }
     buildTypes {
         release {
@@ -38,12 +46,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    /*externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
-        }
-    }*/
-
     sourceSets {
         main {
             jni.srcDirs = []//设置禁止gradle生成Android.mk
@@ -52,17 +54,10 @@ android {
     }
 
 
-    task ndkBuild(type: Exec) {//设置新的so的生成目录
-        Properties properties = new Properties()
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        commandLine "/Users/zhangkun/Library/Android/sdk/ndk/16.1.4479499/ndk-build",
-                "NDK_PROJECT_PATH=$projectDir.absolutePath/build/intermediates/ndk",
-                "NDK_LIBS_OUT=$projectDir.absolutePath/libs",
-                "APP_BUILD_SCRIPT=$projectDir.absolutePath/src/main/jni/Android.mk",
-                "NDK_APPLICATION_MK=$projectDir.absolutePath/src/main/jni/Application.mk"
-    }
-    tasks.withType(JavaCompile) {
-        compileTask -> compileTask.dependsOn ndkBuild
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
     }
 }
 
