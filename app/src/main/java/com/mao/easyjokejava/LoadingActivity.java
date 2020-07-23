@@ -1,5 +1,7 @@
 package com.mao.easyjokejava;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,7 +30,6 @@ public class LoadingActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
 
-
     }
 
     @Override
@@ -46,7 +47,8 @@ public class LoadingActivity extends BaseSkinActivity {
         setContentView(R.layout.activity_loading);
     }
 
-    @OnClick({R.id.tv, R.id.tvHook, R.id.tvP, R.id.tvFix, R.id.tvData, R.id.tvSkin, R.id.tvService, R.id.tvProtect})
+    @OnClick({R.id.tv, R.id.tvHook, R.id.tvP, R.id.tvFix, R.id.tvData, R.id.tvSkin,
+        R.id.tvService, R.id.tvProtect, R.id.tvHide})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv:
@@ -70,22 +72,33 @@ public class LoadingActivity extends BaseSkinActivity {
             case R.id.tvProtect:
                 startActivity(ServiceProtectActivity.class, true);
                 break;
+            case R.id.tvHide:
+                //startActivity(HideActivity.class, true);
+
+                //data由URI来描述和定位，URI由三部分组成，
+                //scheme://host:port/path      模式://主机:端口/路径
+                Intent intent = new Intent();
+                intent.setAction("my_action");
+                intent.addCategory("my_category");
+                intent.setData(Uri.parse("coding://coding.com/movie_library/festival"));
+                startActivity(intent);
+                break;
             case R.id.tvP:
                 AndPermission.with(this)
-                        .runtime()
-                        .permission(Permission.READ_EXTERNAL_STORAGE,
-                                Permission.WRITE_EXTERNAL_STORAGE
-                        )
-                        .onGranted(permissions -> {
-                            // Storage permission are allowed.
-                            for (int i = 0; i < permissions.size(); i++) {
-                                LogU.d("权限 " + permissions.get(i));
-                            }
-                        })
-                        .onDenied(permissions -> {
-                            // Storage permission are not allowed.
-                        })
-                        .start();
+                    .runtime()
+                    .permission(Permission.READ_EXTERNAL_STORAGE,
+                        Permission.WRITE_EXTERNAL_STORAGE
+                    )
+                    .onGranted(permissions -> {
+                        // Storage permission are allowed.
+                        for (int i = 0; i < permissions.size(); i++) {
+                            LogU.d("权限 " + permissions.get(i));
+                        }
+                    })
+                    .onDenied(permissions -> {
+                        // Storage permission are not allowed.
+                    })
+                    .start();
                 break;
         }
 

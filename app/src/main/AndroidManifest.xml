@@ -67,6 +67,22 @@
             android:name=".test.ServiceProtectActivity"
             android:theme="@style/AppTheme" />
 
+        <activity
+            android:name=".HideActivity"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+
+                <action android:name="my_action" />
+                <category android:name="my_category" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="coding.com"
+                    android:path="/movie_library/festival"
+                    android:scheme="coding"/>
+            </intent-filter>
+
+        </activity>
+
         <!--<service
             android:name=".test.MessageService"
             android:process=":remote" />-->
